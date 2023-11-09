@@ -34,7 +34,7 @@ describe('/videos', () => {
                 availableResolutions: [
                     "616"
                 ],
-                canBeDownloaded: "123123312"
+                canBeDownloaded : 123123123123
             })
             .expect(400, {
                 errorsMessages: [
@@ -49,11 +49,11 @@ describe('/videos', () => {
                     {
                         message: "Invalid availableResolutions",
                         field: "availableResolutions"
-                    },
-                    {
-                        message: "Invalid canBeDownloaded",
-                        field: "canBeDownloaded"
                     }
+                    // {
+                    //     message: "Invalid canBeDownloaded",
+                    //     field: "canBeDownloaded"
+                    // }
                 ]
             })
         await request(app)

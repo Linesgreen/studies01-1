@@ -196,6 +196,12 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
            res.status(400).send(error)
            return
        }
+       if (!isNaN((new Date (publicationDate)).getTime())) {
+           error.errorsMessages.push({
+               message : "Invalid publicationDate",
+               field : 'publicationDate'
+           })
+       }
 
        const videoIndex = videos.findIndex(v => v.id == id);
        const video = videos.find(v =>  v.id === id );
