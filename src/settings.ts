@@ -217,7 +217,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
        videos.splice(videoIndex, 1, updateItems)
        res.sendStatus(204)
-       if (typeof canBeDownloaded === "undefined" && typeof canBeDownloaded != "boolean") {
+       if (typeof canBeDownloaded != "boolean") {
            error.errorsMessages.push({
                message : "Invalid canBeDownloaded",
                field : 'canBeDownloaded'
