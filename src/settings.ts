@@ -172,15 +172,16 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
 
        ///////////////
+       if (typeof canBeDownloaded === 'undefined' ) {
+           canBeDownloaded = false;
+       }
        if(typeof canBeDownloaded === "number" || typeof canBeDownloaded != "boolean") {
            error.errorsMessages.push({
                message : "Invalid canBeDownloaded",
                field : 'canBeDownloaded'
            })
        }
-       if (typeof canBeDownloaded === 'undefined' ) {
-           canBeDownloaded = false;
-       }
+
 
        if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === "number" ) {
            minAgeRestriction < 1 || minAgeRestriction > 18  &&  error.errorsMessages.push({
@@ -217,12 +218,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
        videos.splice(videoIndex, 1, updateItems)
        res.sendStatus(204)
-       if (typeof canBeDownloaded != "boolean") {
-           error.errorsMessages.push({
-               message : "Invalid canBeDownloaded",
-               field : 'canBeDownloaded'
-           })
-       }
+       if (typeof canBeDownloaded != "boolean") {}
    } catch (error) {
 
    }
