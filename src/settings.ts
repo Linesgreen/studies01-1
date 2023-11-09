@@ -225,10 +225,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
        videos.splice(videoIndex, 1, updateItems)
        res.sendStatus(204)
-       if (typeof canBeDownloaded != "boolean") {}
-   } catch (error) {
-
-   }
+   } catch (error) {}
 })
 
 

@@ -34,13 +34,14 @@ describe('/videos', () => {
                 availableResolutions: [
                     "616"
                 ],
-                canBeDownloaded : 123123123123
+                canBeDownloaded : 123123123123,
+                publicationDate:123
             })
             .expect(400, {
-                errorsMessages: [
+                "errorsMessages": [
                     {
                         message: "Invalid title",
-                        "field": "title"
+                        field: "title"
                     },
                     {
                         message: "Invalid author",
@@ -49,11 +50,15 @@ describe('/videos', () => {
                     {
                         message: "Invalid availableResolutions",
                         field: "availableResolutions"
+                    },
+                    {
+                        message: "Invalid canBeDownloaded",
+                        field: "canBeDownloaded"
+                    },
+                    {
+                        message: "Invalid publicationDate",
+                        field: "publicationDate"
                     }
-                    // {
-                    //     message: "Invalid canBeDownloaded",
-                    //     field: "canBeDownloaded"
-                    // }
                 ]
             })
         await request(app)
