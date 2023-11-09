@@ -33,16 +33,23 @@ describe('/videos', () => {
                 author: "sssssssssssssssssssssssssssssssssssssssssssssssss",
                 availableResolutions: [
                     "616"
-                ]
+                ],
+                "canBeDownloaded": 1231232123,
             })
             .expect(400, {
                 errorsMessages: [
+
                     { message: 'Invalid title', field: 'title' },
                     { message: 'Invalid author', field: 'author' },
                     {
                         message: 'Invalid availableResolutions',
                         field: 'availableResolutions'
+                    },
+                    {
+                        message: 'Invalid canBeDownloaded',
+                        field: 'canBeDownloaded'
                     }
+
                 ]
             })
         await request(app)

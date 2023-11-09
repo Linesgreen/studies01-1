@@ -137,85 +137,98 @@ app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     res.status(201).send(newVideo)
 })
 
-app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoDto>, res : Response) =>{
-    const  id: number = +req.params.id
-    let error : ErrorType = {
-        errorsMessages: []
-    }
+app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoDto>, res : Response) => {
+   try {
+       const  id: number = +req.params.id
+       let error : ErrorType = {
+           errorsMessages: []
+       }
 
-    let {title, author, availableResolutions, canBeDownloaded, minAgeRestriction, publicationDate} = req.body
-    if(!title || title.trim().length < 1 || title.trim().length > 40) {
-        error.errorsMessages.push({
-            message : "Invalid title",
-            field : 'title'
-        })
-    }
-    if(!author || author.trim().length < 1 || author.trim().length > 20) {
-        error.errorsMessages.push({
+       let {title, author, availableResolutions, canBeDownloaded, minAgeRestriction, publicationDate} = req.body
+       if(!title || title.trim().length < 1 || title.trim().length > 40) {
+           error.errorsMessages.push({
+               message : "Invalid title",
+               field : 'title'
+           })
+       }
+       if(!author || author.trim().length < 1 || author.trim().length > 20) {
+           error.errorsMessages.push({
 
-            message : "Invalid author",
-            field : 'author'
-        })
-    }
+               message : "Invalid author",
+               field : 'author'
+           })
+       }
 
-    if(Array.isArray(availableResolutions)) {
-        availableResolutions.map(r => {
-            !AvailableResolutions.includes(r) && error.errorsMessages.push({
-                message : "Invalid availableResolutions",
-                field : 'availableResolutions'
-            })
-        })
-    } else {
-        availableResolutions = [];
-    }
+       if(Array.isArray(availableResolutions)) {
+           availableResolutions.map(r => {
+               !AvailableResolutions.includes(r) && error.errorsMessages.push({
+                   message : "Invalid availableResolutions",
+                   field : 'availableResolutions'
+               })
+           })
+       } else {
+           availableResolutions = [];
+       }
 
 
-    ///////////////
+       ///////////////
+       if(typeof canBeDownloaded === "number") {
+           error.errorsMessages.push({
+               message : "Invalid canBeDownloaded",
+               field : 'canBeDownloaded'
+           })
+       }
+       if (typeof canBeDownloaded === 'undefined' ) {
+           canBeDownloaded = false;
+       }
 
-    if (typeof canBeDownloaded === 'undefined' ) {
-        canBeDownloaded = false;
-    } else (typeof canBeDownloaded !== 'boolean') {
-        error.errorsMessages.push({
-            message : "canBeDownloaded",
-            field : 'canBeDownloaded'
-        })
-    }
-    if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === "number" ) {
-        minAgeRestriction < 1 || minAgeRestriction > 18  &&  error.errorsMessages.push({
-            message : "Invalid minAgeRestriction",
-            field : 'minAgeRestriction'
-        })
-    } else {
-        minAgeRestriction = null;
-    }
+       if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === "number" ) {
+           minAgeRestriction < 1 || minAgeRestriction > 18  &&  error.errorsMessages.push({
+               message : "Invalid minAgeRestriction",
+               field : 'minAgeRestriction'
+           })
+       } else {
+           minAgeRestriction = null;
+       }
 
-    if (error.errorsMessages.length) {
-        res.status(400).send(error)
-        return
-    }
+       if (error.errorsMessages.length) {
+           res.status(400).send(error)
+           return
+       }
 
-    const videoIndex = videos.findIndex(v => v.id == id);
-    const video = videos.find(v =>  v.id === id );
+       const videoIndex = videos.findIndex(v => v.id == id);
+       const video = videos.find(v =>  v.id === id );
 
-    if (!video) {
+       if (!video) {
 
-        res.sendStatus(404)
-        return;
-    }
+           res.sendStatus(404)
+           return;
+       }
 
-    const updateItems = {
-        ...video,
-        canBeDownloaded,
-        minAgeRestriction,
-        title,
-        author,
-        publicationDate : publicationDate ? publicationDate : video.publicationDate,
-        availableResolutions
-    }
+       const updateItems = {
+           ...video,
+           canBeDownloaded,
+           minAgeRestriction,
+           title,
+           author,
+           publicationDate : publicationDate ? publicationDate : video.publicationDate,
+           availableResolutions
+       }
 
-    videos.splice(videoIndex, 1, updateItems)
-    res.sendStatus(204)
+       videos.splice(videoIndex, 1, updateItems)
+       res.sendStatus(204)
+       if (typeof canBeDownloaded === "undefined" && typeof canBeDownloaded != "boolean") {
+           error.errorsMessages.push({
+               message : "Invalid canBeDownloaded",
+               field : 'canBeDownloaded'
+           })
+       }
+   } catch (error) {
+
+   }
 })
+
+
 
 app.delete('/videos/:id', (req:RequestWithParams<RequestParams>, res : Response) =>{
     const  id: number = +req.params.id
