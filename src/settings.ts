@@ -1,4 +1,5 @@
 import express, {Request, Response} from "express";
+import {type} from "os";
 export const app = express();
 
 app.use(express.json())
@@ -170,8 +171,14 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
 
     ///////////////
-    if (typeof canBeDownloaded === 'undefined') {
+
+    if (typeof canBeDownloaded === 'undefined' ) {
         canBeDownloaded = false;
+    } else (typeof canBeDownloaded !== 'boolean') {
+        error.errorsMessages.push({
+            message : "canBeDownloaded",
+            field : 'canBeDownloaded'
+        })
     }
     if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === "number" ) {
         minAgeRestriction < 1 || minAgeRestriction > 18  &&  error.errorsMessages.push({
