@@ -34,8 +34,7 @@ describe('/videos', () => {
                 availableResolutions: [
                     "616"
                 ],
-                canBeDownloaded : 123123123123,
-                publicationDate:123
+
             })
             .expect(400, {
                 "errorsMessages": [
@@ -50,14 +49,6 @@ describe('/videos', () => {
                     {
                         message: "Invalid availableResolutions",
                         field: "availableResolutions"
-                    },
-                    {
-                        message: "Invalid canBeDownloaded",
-                        field: "canBeDownloaded"
-                    },
-                    {
-                        message: "Invalid publicationDate",
-                        field: "publicationDate"
                     }
                 ]
             })
@@ -143,15 +134,31 @@ describe('/videos', () => {
                 author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
                 availableResolutions: [
                     "P616"
-                ]
+                ],
+                canBeDownloaded: 123123123123,
+                publicationDate:123
             })
             .expect(400, {
-                errorsMessages: [
-                    { message: 'Invalid title', field: 'title' },
-                    { message: 'Invalid author', field: 'author' },
+                "errorsMessages": [
                     {
-                        message: 'Invalid availableResolutions',
-                        field: 'availableResolutions'
+                        message: "Invalid title",
+                        field: "title"
+                    },
+                    {
+                        message: "Invalid author",
+                        field: "author"
+                    },
+                    {
+                        message: "Invalid availableResolutions",
+                        field: "availableResolutions"
+                    },
+                    {
+                        message: "Invalid canBeDownloaded",
+                        field: "canBeDownloaded"
+                    },
+                    {
+                        message: "Invalid publicationDate",
+                        field: "publicationDate"
                     }
                 ]
             })

@@ -181,7 +181,8 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
                field : 'canBeDownloaded'
            })
        }
-       if (typeof publicationDate != "string") {
+
+       if (typeof publicationDate != "string" && typeof publicationDate != "undefined") {
            error.errorsMessages.push({
                message : "Invalid publicationDate",
                field : 'publicationDate'
