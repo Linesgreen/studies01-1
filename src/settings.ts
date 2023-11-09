@@ -172,7 +172,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
 
        ///////////////
-       if(typeof canBeDownloaded === "number") {
+       if(typeof canBeDownloaded === "number" || typeof canBeDownloaded != "boolean") {
            error.errorsMessages.push({
                message : "Invalid canBeDownloaded",
                field : 'canBeDownloaded'
