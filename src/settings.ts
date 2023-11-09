@@ -196,7 +196,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
            res.status(400).send(error)
            return
        }
-       if (!isNaN((new Date (publicationDate)).getTime())) {
+       if (typeof publicationDate !== "string") {
            error.errorsMessages.push({
                message : "Invalid publicationDate",
                field : 'publicationDate'
