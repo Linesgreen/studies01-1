@@ -29,8 +29,8 @@ describe('/videos', () => {
         await request(app)
             .post('/videos/')
             .send({
-                title: "",
-                author: "sssssssssssssssssssssssssssssssssssssssssssssssss",
+                title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
+                author: "aaaaaaaaaaaaaaaaaaa21",
                 availableResolutions: [
                     "616"
                 ],

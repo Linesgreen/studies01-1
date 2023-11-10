@@ -84,8 +84,8 @@ type PostReqBody = {
     author : string,
     availableResolutions: string[]
 }
-const validationReqBody = (reqParams : string)  => {
-    return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < 40 &&  reqParams.trim().length >= 1
+const validationReqBody = (reqParams : string, maxLength : number)  => {
+    return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
 }
 /////////////////
 
@@ -97,13 +97,13 @@ app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
 
     let {title, author, availableResolutions} : PostReqBody = req.body
 
-    if(!validationReqBody(title)) {
+    if(!validationReqBody(title, 40)) {
         error.errorsMessages.push({
             message : "Invalid title",
             field : 'title'
         })
     }
-    if(!validationReqBody(author)) {
+    if(!validationReqBody(author, 20)) {
         error.errorsMessages.push({
             message : "Invalid author",
             field : 'author'
