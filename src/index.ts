@@ -1,7 +1,20 @@
-import {app} from "./settings";
-
+import {RouterPaths, videoRouter} from "./routes/videos-router";
+import express, {Request, Response} from "express";
+import {videos} from "./routes/videos-router";
+export const app  = express()
 const port = 3000;
 
+
+app.use(express.json())
+app.use(RouterPaths.videos, videoRouter)
+
+app.get('/', (req : Request, res : Response) => {
+    res.send('Заглушка')
+})
+app.delete(RouterPaths.__test__, (req : Request, res : Response) => {
+    videos.length = 0;
+    res.sendStatus(204);
+})
 
 
 

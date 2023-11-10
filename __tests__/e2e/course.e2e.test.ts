@@ -1,6 +1,7 @@
 import request from 'supertest'
-import {app, RouterPaths} from "../../src/settings";
-import {VideoType} from "../../src/settings";
+import {RouterPaths} from "../../src/routes/videos-router";
+import {VideoType} from "../../src/routes/videos-router";
+import {app} from "../../src"
 
 
 describe('/videos', () => {
