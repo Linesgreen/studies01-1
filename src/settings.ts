@@ -1,5 +1,4 @@
 import express, {Request, Response} from "express";
-import {type} from "os";
 export const app = express();
 
 app.use(express.json())
@@ -79,21 +78,32 @@ app.get('/videos/:id',(req:RequestWithParams<RequestParams>, res: Response) =>{
 
     res.send(video);
 })
+//////////////
+type PostReqBody = {
+    title : string,
+    author : string,
+    availableResolutions: string[]
+}
+const validationReqBody = (reqParams : string)  => {
+    return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < 40 &&  reqParams.trim().length >= 1
+}
+/////////////////
+
 
 app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     let error : ErrorType = {
         errorsMessages: []
     }
 
-    let {title, author, availableResolutions} = req.body
+    let {title, author, availableResolutions} : PostReqBody = req.body
 
-    if(!title || title.trim().length < 1 || title.trim().length > 40) {
+    if(!validationReqBody(title)) {
         error.errorsMessages.push({
             message : "Invalid title",
             field : 'title'
         })
     }
-    if(!author || author.trim().length < 1 || author.trim().length > 20) {
+    if(!validationReqBody(author)) {
         error.errorsMessages.push({
             message : "Invalid author",
             field : 'author'

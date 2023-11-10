@@ -73,7 +73,7 @@ describe('/videos', () => {
                 ]
             })
             .expect(201)
-
+        //Проверяем что созданное видео соответствует видео
         createdVideo =  createResponse.body;
         expect(createdVideo).toEqual({
             id: expect.any(Number),
@@ -106,6 +106,7 @@ describe('/videos', () => {
             })
             .expect(201)
 
+        //Проверяем что созданное видео соответствует второму видео
         secondCreatedVideo =  createResponse.body;
         expect(secondCreatedVideo).toEqual({
             id: expect.any(Number),
@@ -220,7 +221,7 @@ describe('/videos', () => {
                 ]
             })
 
-        // Проверяем что второй курс secondCreatedVideo не изменился
+        // Проверяем что  secondCreatedVideo не изменилось
         await request(app)
             .get('/videos/' + secondCreatedVideo.id)
             .expect(200, secondCreatedVideo)
