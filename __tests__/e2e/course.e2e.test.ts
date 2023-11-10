@@ -1,7 +1,8 @@
 import request from 'supertest'
 import {RouterPaths} from "../../src/routes/videos-router";
-import {VideoType} from "../../src/routes/videos-router";
+
 import {app} from "../../src"
+import {VideoType} from "../../src/types";
 
 
 describe('/videos', () => {
@@ -58,7 +59,7 @@ describe('/videos', () => {
             .expect(200, [])
     })
 
-    //Содаем переменные для хранения данных созданных видео
+    //Переменные для хранения данных созданных видео
     let createdVideo : VideoType;
     let secondCreatedVideo : VideoType;
 
