@@ -87,6 +87,12 @@ type PostReqBody = {
 const validationReqBody = (reqParams : string, maxLength : number)  => {
     return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
 }
+const generateError = (message : string, field : string) : ErrorMessagesType => {
+    return  {
+        message : message,
+        field : field
+    }
+}
 /////////////////
 
 
@@ -98,24 +104,18 @@ app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     let {title, author, availableResolutions} : PostReqBody = req.body
 
     if(!validationReqBody(title, 40)) {
-        error.errorsMessages.push({
-            message : "Invalid title",
-            field : 'title'
-        })
+        error.errorsMessages.push(generateError("Invalid title", 'title'))
+
     }
     if(!validationReqBody(author, 20)) {
-        error.errorsMessages.push({
-            message : "Invalid author",
-            field : 'author'
-        })
+        error.errorsMessages.push(generateError("Invalid author", 'author'))
     }
 
     if(Array.isArray(availableResolutions)) {
         availableResolutions.map(r => {
-            !AvailableResolutions.includes(r) && error.errorsMessages.push({
-                message : "Invalid availableResolutions",
-                field : 'availableResolutions'
-            })
+            !AvailableResolutions.includes(r) &&
+            error.errorsMessages
+                .push(generateError("Invalid availableResolutions", 'availableResolutions'))
         })
     } else {
         availableResolutions = [];
