@@ -45,6 +45,8 @@ type CreateVideoDto = {
     availableResolutions: typeof AvailableResolutions;
 
 }
+
+
 type ErrorType = {
     errorsMessages : ErrorMessagesType[]
 }
