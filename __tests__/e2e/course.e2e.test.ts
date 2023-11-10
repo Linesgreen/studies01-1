@@ -1,5 +1,5 @@
 import request from 'supertest'
-import {app} from "../../src/settings";
+import {app, RouterPaths} from "../../src/settings";
 import {VideoType} from "../../src/settings";
 
 
@@ -13,21 +13,21 @@ describe('/videos', () => {
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
        await request(app)
-            .get('/videos')
+            .get(RouterPaths.videos)
             .expect(200, [])
     })
 
     // Проверка на несуществующее видео
     it('should return 404 for not existing videos',async () =>{
         await request(app)
-            .get('/videos/-100')
+            .get(`${RouterPaths.videos}/-100`)
             .expect(404)
     })
 
     // Пытаемся создать видео с неправильными данными
     it("should'nt create video with incorrect input data ",async () =>{
         await request(app)
-            .post('/videos/')
+            .post(RouterPaths.videos)
             .send({
                 title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
                 author: "aaaaaaaaaaaaaaaaaaa21",
@@ -53,7 +53,7 @@ describe('/videos', () => {
                 ]
             })
         await request(app)
-            .get('/videos')
+            .get(RouterPaths.videos)
             .expect(200, [])
     })
 
@@ -64,7 +64,7 @@ describe('/videos', () => {
     // Создаем видео
     it("should CREATE video with correct input data ",async () =>{
         const createResponse = await request(app)
-            .post('/videos/')
+            .post(RouterPaths.videos)
             .send({
                 title: "test",
                 author: "Vlad",
@@ -89,14 +89,14 @@ describe('/videos', () => {
         })
 
         await request(app)
-            .get('/videos')
+            .get(RouterPaths.videos)
             .expect(200, [createdVideo])
     })
 
     // Создаем второе видео
     it("should CREATE video2 with correct input data ",async () =>{
         const createResponse = await request(app)
-            .post('/videos/')
+            .post(RouterPaths.videos)
             .send({
                 title: "test2",
                 author: "VladDalv",
@@ -122,14 +122,14 @@ describe('/videos', () => {
         })
 
         await request(app)
-            .get('/videos')
+            .get(RouterPaths.videos)
             .expect(200, [createdVideo, secondCreatedVideo])
     })
 
     // Пытаемся обновить createdVideo c неправильными данными
     it("should'nt UPDATE video with incorrect input data ",async () =>{
          await request(app)
-            .put('/videos/' + createdVideo.id)
+            .put(`${RouterPaths.videos}/${createdVideo.id}`)
             .send({
                 title: "",
                 author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
@@ -165,14 +165,14 @@ describe('/videos', () => {
             })
 
         await request(app)
-            .get('/videos/' + createdVideo.id)
+            .get(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(200, createdVideo)
 
     })
     // Пытаемя обновить secondCreatedVideo с неправильными данными
     it("should'nt UPDATE video2 with incorrect input data ",async () =>{
         await request(app)
-            .put('/videos/' + secondCreatedVideo.id)
+            .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .send({
                 title: "",
                 author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
@@ -192,7 +192,7 @@ describe('/videos', () => {
             })
 
         await request(app)
-            .get('/videos/' + secondCreatedVideo.id)
+            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(200, secondCreatedVideo)
 
     })
@@ -200,7 +200,7 @@ describe('/videos', () => {
     // Обновляем данные createdVideo
     it("should UPDATE video with correct input data ",async () =>{
         await request(app)
-            .put('/videos/' + createdVideo.id)
+            .put(`${RouterPaths.videos}/${createdVideo.id}`)
             .send({
                 title: "update video",
                 author: ":)",
@@ -211,7 +211,7 @@ describe('/videos', () => {
             .expect(204)
         // Проверяем что первый курс сreatedVideo изменился
         await request(app)
-            .get('/videos/' + createdVideo.id)
+            .get(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(200, {
                 ...createdVideo,
                 title: "update video",
@@ -223,7 +223,7 @@ describe('/videos', () => {
 
         // Проверяем что  secondCreatedVideo не изменилось
         await request(app)
-            .get('/videos/' + secondCreatedVideo.id)
+            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(200, secondCreatedVideo)
 
         createdVideo = {
@@ -238,7 +238,7 @@ describe('/videos', () => {
     // Обновляем данные secondCreatedVideo
     it("should UPDATE video2 with correct input data ",async () =>{
         await request(app)
-            .put('/videos/' + secondCreatedVideo.id)
+            .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .send({
                 title: "update video2",
                 author: ":З",
@@ -249,7 +249,7 @@ describe('/videos', () => {
             .expect(204)
 
         await request(app)
-            .get('/videos/' + secondCreatedVideo.id)
+            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(200, {
                 ...secondCreatedVideo,
                 title: "update video2",
@@ -273,24 +273,24 @@ describe('/videos', () => {
     // Удаляем createdVideo
     it("should UPDATE video with correct input data ",async () =>{
         await request(app)
-            .delete('/videos/' + createdVideo.id)
+            .delete(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(204)
 
         // Проверяем удалилось ли видео
         await request(app)
-            .get('/videos/' + createdVideo.id)
+            .get(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(404)
 
     })
     // Удаляем secondCreatedVideo
     it("should UPDATE video2 with correct input data ",async () =>{
         await request(app)
-            .delete('/videos/' + secondCreatedVideo.id)
+            .delete(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(204)
 
         // Проверяем удалилось ли видео
         await request(app)
-            .get('/videos/' + secondCreatedVideo.id)
+            .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(404)
 
     })
@@ -298,7 +298,7 @@ describe('/videos', () => {
     // Проверяем что БД пустая
     it('should return 200 and empty []',async () =>{
         await request(app)
-            .get('/videos')
+            .get(RouterPaths.videos)
             .expect(200, [])
     })
 })

@@ -15,6 +15,7 @@ export type VideoType = {
             publicationDate: string;
             availableResolutions: typeof  AvailableResolutions;
         }
+
 type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestParams = {
     id:string;
@@ -57,18 +58,21 @@ const videos: VideoType[] = [
         ]
     }
     ]
-
+export const RouterPaths = {
+    videos : '/videos',
+    __test__ : '/testing/all-data'
+}
 
 app.get('/', (req : Request, res : Response) => {
     res.send('Заглушка')
 })
 
-app.get('/videos', (req : Request, res : Response) => {
+app.get(RouterPaths.videos, (req : Request, res : Response) => {
     res.status(200).send(videos);
 
 })
 
-app.get('/videos/:id',(req:RequestWithParams<RequestParams>, res: Response) =>{
+app.get(`${RouterPaths.videos}/:id`,(req:RequestWithParams<RequestParams>, res: Response) =>{
     const  id: number = +req.params.id
     const video = videos.find(v => v.id === id)
     if (!video) {
@@ -96,7 +100,7 @@ const generateError = (message : string, field : string) : ErrorMessagesType => 
 /////////////////
 
 
-app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
+app.post(RouterPaths.videos, (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     let error : ErrorType = {
         errorsMessages: []
     }
@@ -147,7 +151,7 @@ app.post('/videos', (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     res.status(201).send(newVideo)
 })
 
-app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoDto>, res : Response) => {
+app.put(`${RouterPaths.videos}/:id`,(req: RequestWithBodyAndParams<RequestParams, UpdateVideoDto>, res : Response) => {
    try {
        const  id: number = +req.params.id
        let error : ErrorType = {
@@ -241,7 +245,7 @@ app.put('/videos/:id',(req: RequestWithBodyAndParams<RequestParams, UpdateVideoD
 
 
 
-app.delete('/videos/:id', (req:RequestWithParams<RequestParams>, res : Response) =>{
+app.delete(`${RouterPaths.videos}/:id`, (req:RequestWithParams<RequestParams>, res : Response) =>{
     const  id: number = +req.params.id
 
 
@@ -258,7 +262,7 @@ app.delete('/videos/:id', (req:RequestWithParams<RequestParams>, res : Response)
 
 })
 
-app.delete('/testing/all-data', (req : Request, res : Response) => {
+app.delete(RouterPaths.__test__, (req : Request, res : Response) => {
     videos.length = 0;
     res.sendStatus(204);
 })
