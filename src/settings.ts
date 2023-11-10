@@ -4,6 +4,10 @@ export const app = express();
 app.use(express.json())
 
 const AvailableResolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
+export const RouterPaths = {
+    videos : '/videos',
+    __test__ : '/testing/all-data'
+}
 
 export type VideoType = {
             id: number;
@@ -15,6 +19,21 @@ export type VideoType = {
             publicationDate: string;
             availableResolutions: typeof  AvailableResolutions;
         }
+const videos: VideoType[] = [
+    {
+        id: 0,
+        title: "string",
+        author: "string",
+        canBeDownloaded: true,
+        minAgeRestriction: null,
+        createdAt: "2023-11-07T11:55:39.104Z",
+        publicationDate: "2023-11-07T11:55:39.104Z",
+        availableResolutions: [
+            "P144"
+        ]
+    }
+]
+
 
 type RequestWithParams<P> = Request<P, {}, {}, {}>
 type RequestParams = {
@@ -43,36 +62,32 @@ type UpdateVideoDto = {
     "minAgeRestriction": number | null
     "publicationDate": string
 }
-
-
-const videos: VideoType[] = [
-    {
-        id: 0,
-        title: "string",
-        author: "string",
-        canBeDownloaded: true,
-        minAgeRestriction: null,
-        createdAt: "2023-11-07T11:55:39.104Z",
-        publicationDate: "2023-11-07T11:55:39.104Z",
-        availableResolutions: [
-            "P144"
-        ]
-    }
-    ]
-export const RouterPaths = {
-    videos : '/videos',
-    __test__ : '/testing/all-data'
+type PostReqBody = {
+    title : string,
+    author : string,
+    availableResolutions: string[]
 }
+
+
+function validationReqBody (reqParams : string, maxLength : number) : boolean {
+    return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
+}
+function generateError(message : string, field : string) : ErrorMessagesType {
+    return  {
+        message : message,
+        field : field
+    }
+}
+
+
 
 app.get('/', (req : Request, res : Response) => {
     res.send('Заглушка')
 })
-
 app.get(RouterPaths.videos, (req : Request, res : Response) => {
     res.status(200).send(videos);
 
 })
-
 app.get(`${RouterPaths.videos}/:id`,(req:RequestWithParams<RequestParams>, res: Response) =>{
     const  id: number = +req.params.id
     const video = videos.find(v => v.id === id)
@@ -83,24 +98,6 @@ app.get(`${RouterPaths.videos}/:id`,(req:RequestWithParams<RequestParams>, res: 
 
     res.send(video);
 })
-//////////////
-type PostReqBody = {
-    title : string,
-    author : string,
-    availableResolutions: string[]
-}
-const validationReqBody = (reqParams : string, maxLength : number)  => {
-    return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
-}
-const generateError = (message : string, field : string) : ErrorMessagesType => {
-    return  {
-        message : message,
-        field : field
-    }
-}
-/////////////////
-
-
 app.post(RouterPaths.videos, (req : RequestWithBody<CreateVideoDto>, res : Response) => {
     let error : ErrorType = {
         errorsMessages: []
@@ -151,9 +148,8 @@ app.post(RouterPaths.videos, (req : RequestWithBody<CreateVideoDto>, res : Respo
 
     res.status(201).send(newVideo)
 })
-
 app.put(`${RouterPaths.videos}/:id`,(req: RequestWithBodyAndParams<RequestParams, UpdateVideoDto>, res : Response) => {
-   try {
+
        const  id: number = +req.params.id
        let error : ErrorType = {
            errorsMessages: []
@@ -241,11 +237,8 @@ app.put(`${RouterPaths.videos}/:id`,(req: RequestWithBodyAndParams<RequestParams
 
        videos.splice(videoIndex, 1, updateItems)
        res.sendStatus(204)
-   } catch (error) {}
+
 })
-
-
-
 app.delete(`${RouterPaths.videos}/:id`, (req:RequestWithParams<RequestParams>, res : Response) =>{
     const  id: number = +req.params.id
 
@@ -262,7 +255,6 @@ app.delete(`${RouterPaths.videos}/:id`, (req:RequestWithParams<RequestParams>, r
     res.sendStatus(204)
 
 })
-
 app.delete(RouterPaths.__test__, (req : Request, res : Response) => {
     videos.length = 0;
     res.sendStatus(204);
