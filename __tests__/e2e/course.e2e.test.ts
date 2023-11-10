@@ -3,6 +3,7 @@ import {RouterPaths} from "../../src/routes/videos-router";
 
 import {app} from "../../src"
 import {VideoType} from "../../src/types";
+import {VideoCreateModel} from "../../src/model/VideosCreateModels";
 
 
 describe('/videos', () => {
@@ -65,15 +66,16 @@ describe('/videos', () => {
 
     // Создаем видео
     it("should CREATE video with correct input data ",async () =>{
+        const videoData : VideoCreateModel  = {
+            title: "test",
+            author: "Vlad",
+            availableResolutions: [
+                "P1440"
+            ]
+        };
         const createResponse = await request(app)
             .post(RouterPaths.videos)
-            .send({
-                title: "test",
-                author: "Vlad",
-                availableResolutions: [
-                    "P1440"
-                ]
-            })
+            .send(videoData)
             .expect(201)
         //Проверяем что созданное видео соответствует видео
         createdVideo =  createResponse.body;
@@ -97,15 +99,16 @@ describe('/videos', () => {
 
     // Создаем второе видео
     it("should CREATE video2 with correct input data ",async () =>{
+        const videoData : VideoCreateModel = {
+            title: "test2",
+            author: "VladDalv",
+            availableResolutions: [
+                "P1440"
+            ]
+        };
         const createResponse = await request(app)
             .post(RouterPaths.videos)
-            .send({
-                title: "test2",
-                author: "VladDalv",
-                availableResolutions: [
-                    "P1440"
-                ]
-            })
+            .send(videoData)
             .expect(201)
 
         //Проверяем что созданное видео соответствует второму видео
@@ -174,15 +177,16 @@ describe('/videos', () => {
     })
     // Пытаемя обновить secondCreatedVideo с неправильными данными
     it("should'nt UPDATE video2 with incorrect input data ",async () =>{
+        const videoData : VideoCreateModel = {
+            title: "",
+            author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
+            availableResolutions: [
+                "P616"
+            ]
+        };
         await request(app)
             .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .send({
-                title: "",
-                author: ":):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):):)",
-                availableResolutions: [
-                    "P616"
-                ]
-            })
+            .send(videoData)
             .expect(400, {
                 errorsMessages: [
                     { message: 'Invalid title', field: 'title' },
@@ -202,15 +206,16 @@ describe('/videos', () => {
 
     // Обновляем данные createdVideo
     it("should UPDATE video with correct input data ",async () =>{
+        const videoData : VideoCreateModel  = {
+            title: "update video",
+            author: ":)",
+            availableResolutions: [
+                "P1440"
+            ]
+        };
         await request(app)
             .put(`${RouterPaths.videos}/${createdVideo.id}`)
-            .send({
-                title: "update video",
-                author: ":)",
-                availableResolutions: [
-                    "P1440"
-                ]
-            })
+            .send(videoData)
             .expect(204)
         // Проверяем что первый курс сreatedVideo изменился
         await request(app)
@@ -229,6 +234,7 @@ describe('/videos', () => {
             .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(200, secondCreatedVideo)
 
+        // Обновляем запись с первым видео
         createdVideo = {
             ...createdVideo,
             title: "update video",
@@ -240,15 +246,16 @@ describe('/videos', () => {
     })
     // Обновляем данные secondCreatedVideo
     it("should UPDATE video2 with correct input data ",async () =>{
+        const videoData : VideoCreateModel = {
+            title: "update video2",
+            author: ":З",
+            availableResolutions: [
+                "P144"
+            ]
+        };
         await request(app)
             .put(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
-            .send({
-                title: "update video2",
-                author: ":З",
-                availableResolutions: [
-                    "P144"
-                ]
-            })
+            .send(videoData)
             .expect(204)
 
         await request(app)
@@ -261,7 +268,7 @@ describe('/videos', () => {
                     "P144"
                 ]
             })
-
+        // Обновляем запись с вторым видео
         secondCreatedVideo  = {
             ...secondCreatedVideo,
             title: "update video2",
