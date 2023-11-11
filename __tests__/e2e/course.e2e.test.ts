@@ -29,16 +29,17 @@ describe('/videos', () => {
 
     // Пытаемся создать видео с неправильными данными
     it("should'nt create video with incorrect input data ",async () =>{
+        const videoData : VideoCreateModel  = {
+            title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
+            author: "aaaaaaaaaaaaaaaaaaa21",
+            availableResolutions: [
+                "616"
+            ],
+
+        };
         await request(app)
             .post(RouterPaths.videos)
-            .send({
-                title: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa41",
-                author: "aaaaaaaaaaaaaaaaaaa21",
-                availableResolutions: [
-                    "616"
-                ],
-
-            })
+            .send(videoData)
             .expect(400, {
                 "errorsMessages": [
                     {
@@ -141,8 +142,8 @@ describe('/videos', () => {
                 availableResolutions: [
                     "P616"
                 ],
-                canBeDownloaded: 123123123123,
-                publicationDate:123
+                canBeDownloaded: "",
+                publicationDate:'lol'
             })
             .expect(400, {
                 "errorsMessages": [
@@ -222,11 +223,7 @@ describe('/videos', () => {
             .get(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(200, {
                 ...createdVideo,
-                title: "update video",
-                author: ":)",
-                availableResolutions: [
-                    "P1440"
-                ]
+                ...videoData
             })
 
         // Проверяем что  secondCreatedVideo не изменилось
@@ -237,11 +234,7 @@ describe('/videos', () => {
         // Обновляем запись с первым видео
         createdVideo = {
             ...createdVideo,
-            title: "update video",
-            author: ":)",
-            availableResolutions: [
-                "P1440"
-            ]
+            ...videoData
         }
     })
     // Обновляем данные secondCreatedVideo
@@ -262,26 +255,18 @@ describe('/videos', () => {
             .get(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(200, {
                 ...secondCreatedVideo,
-                title: "update video2",
-                author: ":З",
-                availableResolutions: [
-                    "P144"
-                ]
+                ...videoData
             })
         // Обновляем запись с вторым видео
         secondCreatedVideo  = {
             ...secondCreatedVideo,
-            title: "update video2",
-            author: ":З",
-            availableResolutions: [
-                "P144"
-            ]
+            ...videoData
         }
 
     })
 
     // Удаляем createdVideo
-    it("should UPDATE video with correct input data ",async () =>{
+    it("should DELETE video with correct input data ",async () =>{
         await request(app)
             .delete(`${RouterPaths.videos}/${createdVideo.id}`)
             .expect(204)
@@ -293,7 +278,7 @@ describe('/videos', () => {
 
     })
     // Удаляем secondCreatedVideo
-    it("should UPDATE video2 with correct input data ",async () =>{
+    it("should DELETE video2 with correct input data ",async () =>{
         await request(app)
             .delete(`${RouterPaths.videos}/${secondCreatedVideo.id}`)
             .expect(204)

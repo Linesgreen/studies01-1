@@ -156,7 +156,8 @@ videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoU
         })
     }
 
-    if (typeof publicationDate != "string" && typeof publicationDate != "undefined") {
+
+    if (typeof publicationDate != "undefined" && !(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/gi).test(publicationDate) ) {
         error.errorsMessages.push({
             message : "Invalid publicationDate",
             field : 'publicationDate'
