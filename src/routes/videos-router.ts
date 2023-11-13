@@ -53,7 +53,7 @@ videoRouter.get('/', (req : Request, res : Response<VideoViewModel[]>) => {
 })
 videoRouter.get(`/:id`,(req:RequestWithParams<VideoGetModel>, res: Response<VideoViewModel>) =>{
     const  id: number = +req.params.id
-    const video = videos.find(v => v.id === id)
+    const video : VideoType | undefined = videos.find(v => v.id === id)
     if (!video) {
         res.sendStatus(404)
         return
@@ -91,12 +91,12 @@ videoRouter.post('/', (req : RequestWithBody<VideoCreateModel>, res : Response<V
         return
     }
 
-    const createdAT = new Date()
-    const publicationDate = new Date()
+    const createdAT : Date = new Date()
+    const publicationDate : Date = new Date()
 
     publicationDate.setDate(createdAT.getDate() + 1)
 
-    const newVideo = {
+    const newVideo : VideoType = {
         id: +(new Date()),
         canBeDownloaded: false,
         minAgeRestriction: null,
@@ -145,7 +145,7 @@ videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoU
     }
 
 
-    ///////////////
+
     if (typeof canBeDownloaded === 'undefined' ) {
         canBeDownloaded = false;
     }
@@ -156,8 +156,8 @@ videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoU
         })
     }
 
-
-    if (typeof publicationDate != "undefined" && !(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/gi).test(publicationDate) ) {
+    const dateInspection: boolean = (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/gi).test(publicationDate);
+    if (typeof publicationDate != "undefined" && !dateInspection ) {
         error.errorsMessages.push({
             message : "Invalid publicationDate",
             field : 'publicationDate'
