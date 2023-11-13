@@ -23,16 +23,11 @@ export type ErrorMessagesType = {
     field: string
 }
 
-
-
-
 export type PostReqBody = {
     title : string,
     author : string,
     availableResolutions: string[]
 }
-
-
 
 export type CreateVideoDto = {
     title: string

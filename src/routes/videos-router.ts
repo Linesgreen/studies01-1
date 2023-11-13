@@ -13,7 +13,7 @@ import {VideoDeleteModel} from "../model/VideoDeleteModel";
 import {VideoViewModel} from "../model/VideosViewModel";
 export const videoRouter = Router ({});
 
-export const AvailableResolutions = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
+export const AvailableResolutions= [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ];
 export const RouterPaths = {
     videos : '/videos',
     __test__ : '/testing/all-data'
@@ -35,7 +35,6 @@ export const videos: VideoType[] = [
     }
 ]
 
-
 function validationReqBody (reqParams : string, maxLength : number) : boolean {
     return typeof reqParams  != 'undefined' && typeof reqParams  === 'string' && reqParams.trim().length < maxLength &&  reqParams.trim().length >= 1
 }
@@ -46,10 +45,8 @@ function generateError(message : string, field : string) : ErrorMessagesType {
     }
 }
 
-
 videoRouter.get('/', (req : Request, res : Response<VideoViewModel[]>) => {
     res.status(200).send(videos);
-
 })
 videoRouter.get(`/:id`,(req:RequestWithParams<VideoGetModel>, res: Response<VideoViewModel>) =>{
     const  id: number = +req.params.id
@@ -93,7 +90,6 @@ videoRouter.post('/', (req : RequestWithBody<VideoCreateModel>, res : Response<V
 
     const createdAT : Date = new Date()
     const publicationDate : Date = new Date()
-
     publicationDate.setDate(createdAT.getDate() + 1)
 
     const newVideo : VideoType = {
@@ -108,12 +104,12 @@ videoRouter.post('/', (req : RequestWithBody<VideoCreateModel>, res : Response<V
     }
 
     videos.push(newVideo)
-
     res.status(201).send(newVideo)
 })
 videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoUpdateModelBody>, res : Response<VideoViewModel> & Response<ErrorType>) => {
 
     const  id: number = +req.params.id
+
     let error : ErrorType = {
         errorsMessages: []
     }
@@ -180,8 +176,8 @@ videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoU
     }
 
 
-    const videoIndex = videos.findIndex(v => v.id == id);
-    const video = videos.find(v =>  v.id === id );
+    const videoIndex : number = videos.findIndex(v => v.id == id);
+    const video : VideoType | undefined = videos.find(v =>  v.id === id );
 
     if (!video) {
 
@@ -189,7 +185,7 @@ videoRouter.put(`/:id`,(req: RequestWithBodyAndParams<VideoUpdateModelId, VideoU
         return;
     }
 
-    const updateItems = {
+    const updateItems : VideoType = {
         ...video,
         canBeDownloaded,
         minAgeRestriction,

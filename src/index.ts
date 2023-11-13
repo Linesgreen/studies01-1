@@ -8,6 +8,7 @@ const port = 3002;
 app.use(express.json())
 app.use(RouterPaths.videos, videoRouter)
 
+
 app.get('/', (req : Request, res : Response) => {
     res.send('Заглушка')
 })
@@ -15,7 +16,6 @@ app.delete(RouterPaths.__test__, (req : Request, res : Response) => {
     videos.length = 0;
     res.sendStatus(204);
 })
-
 
 
 app.listen(port, () => {
